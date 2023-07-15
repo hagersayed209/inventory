@@ -1,5 +1,5 @@
 @import "https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap";
-header, footer { display: none; }
+
 .login-wrapper {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -78,7 +78,7 @@ body {
     font-size: 14px;
     color: #000;
     line-height: 1.5;
-    background-color: #fafbfe
+   
 }
 
 img {
@@ -289,11 +289,11 @@ div#global-loader .whirly-loader:not(:required) {
     width: 100%;
     height: 100vh
 }
-	.login-wrapper  #wp-submit {
-/*     width: 50%; */
+	.login-wrapper  #wp-submit ,.btn-prof {
+
     width: 100%;
     font-weight: 700;
-    background: #FF9F43;
+    background: #FF9F43 !important;
     border-color: #FF9F43 !important;
     padding: 12px;
     -webkit-transition: all 0.5s ease;
@@ -302,9 +302,12 @@ div#global-loader .whirly-loader:not(:required) {
     margin-top: 15px;
     color: #fff;
 }
+input[type="submit"] {
+   background: #FF9F43 !important;
+	border-color: #FF9F43 !important;align-content
+}
 
-
-.login-wrapper #wp-submit:hover {
+.login-wrapper #wp-submit:hover, .btn-prof:hover{
     box-shadow: 0 50px #fff inset !important;
     color: #ff9f43
 }

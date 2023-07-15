@@ -1,7 +1,7 @@
 <?php
     if ( isset( $_GET['supplier_id'] ) ) {
         $supplier_id = intval( $_GET['supplier_id'] );
-        // Use $supplier_id to query database and retrieve supplier data for editing
+       
     require_once ABSPATH . 'wp-load.php';
 
 
@@ -23,10 +23,7 @@ $users = get_users(array(
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" ></script>
 
-<script>
-$(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});</script>
+
 <div class="s-content">
 	
 <hi>Edit Supplier</h1>

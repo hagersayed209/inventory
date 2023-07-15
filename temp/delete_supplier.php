@@ -13,9 +13,3 @@ global $wpdb;
 
 wp_redirect(admin_url('admin.php?page=inventory') );
 exit;
-
-
-
-
-
-

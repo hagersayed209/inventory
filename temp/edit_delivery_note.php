@@ -1,7 +1,7 @@
 <?php
     if ( isset( $_GET['delivery_note_id'] ) ) {
         $delivery_note_id = intval( $_GET['delivery_note_id'] );
-        // Use $delivery_note_id to query database and retrieve supplier data for editing
+      
     require_once ABSPATH . 'wp-load.php';
 wp_enqueue_media();
 
@@ -25,10 +25,6 @@ $users = get_users(array(
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" ></script>
 
-<script>
-$(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});</script>
 <div class="s-content">
 	
 <hi>Edit Supplier</h1>
@@ -72,11 +68,21 @@ $(document).ready(function() {
   
   
 		</div>
+        
   <div class="col-sm-5 mb-3">
    <label for="image_id">Image:</label>
-  <input type="hidden" name="image_id" id="image_id"value="<?php echo $delivery_note->image_id; ?>">
+  <input type="hidden" name="image_id" id="image_id"value="<?php echo $delivery_note->image_ids; ?>">
   <button type="button"class="btn btn-submit" id="select-image-btn">Select Image</button>
-  
+    
+ <?php if ($delivery_note->image_ids) : 
+       
+          $image_ids = explode(',', $delivery_note->image_ids); 
+          foreach ($image_ids as $image_id) {
+            echo '<img width="50" height="50" src="' . wp_get_attachment_url($image_id) . '">';
+          }
+        ?>
+      <?php endif; ?>
+    
   
 		</div>
 	</div>
@@ -88,25 +94,28 @@ $(document).ready(function() {
 </form>
 	</div>
 
+
 <script>
 jQuery(document).ready(function($) {
-  $('#select-image-btn').click(function() {
-    var frame = wp.media({
-      title: 'Select Image',
-      multiple: false,
-      library: { type: 'image' },
-      button: { text: 'Select' }
-    });
-    frame.on('select', function() {
-      var attachment = frame.state().get('selection').first().toJSON();
-      $('#image_id').val(attachment.id);
-    });
-    frame.open();
-   
-  
-
+$(document).on('click', '.select-image-btn', function() {
+  var button = $(this);
+  var frame = wp.media({
+    title: 'Select Image',
+    multiple: "add",
+    library: { type: 'image' },
+    button: { text: 'Select' }
   });
-  
+  frame.on('select', function() {
+    var attachments = frame.state().get('selection').toJSON();
+    var imageIds = [];
+    $.each(attachments, function(index, attachment) {
+      imageIds.push(attachment.id);
+    });
+    button.closest('.row').find('.image-id').val(imageIds.join(','));
+  });
+  frame.open();
+});
+
 
 });
 </script>
@@ -116,12 +125,12 @@ $table_name = $wpdb->prefix . 'delivery_notes';
 	
 if ( isset( $_POST['product_id'] ) && isset( $_POST['supplier_select'] ) && isset( $_POST['note'] )  && isset( $_POST['qty'] ) && isset( $_POST['date'] ) && isset( $_POST['image_id'] ) ) {
   $product_id = sanitize_text_field( $_POST['product_id'] );
-      $supplier_id = sanitize_text_field( $_POST['supplier_select'] );
+  $supplier_id = sanitize_text_field( $_POST['supplier_select'] );
   $note = sanitize_text_field( $_POST['note'] );
   $qty = intval( $_POST['qty'] );
-  $date = sanitize_text_field( $_POST['date'] );
-  $image_id = intval( $_POST['image_id'] );
   
+  $date = sanitize_text_field( $_POST['date'] );
+ $image_ids = $_POST['image_id']; 
   $data = array(
     'product_id' => $product_id,
      'supplier_id' => $supplier_id,
@@ -129,7 +138,7 @@ if ( isset( $_POST['product_id'] ) && isset( $_POST['supplier_select'] ) && isse
    
     'qty' => $qty,
     'date' => $date,
-    'image_id' => $image_id,
+    'image_ids' => $image_ids,
   );
   
     $where = array(
